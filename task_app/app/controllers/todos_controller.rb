@@ -1,4 +1,6 @@
 class TodosController < ApplicationController
+	before_action :authorize!, only: :index
+
 	def index
 		@author = Author.find(params[:id])
 		@todos = @author.todos
@@ -13,5 +15,12 @@ class TodosController < ApplicationController
 		todo = Todo.create(new_todo)
 		@author.todos << todo
 		redirect_to "/authors/#{@author.id}/todos"
+	end
+
+private
+	def authorize!
+		unless TodoPolicy.new(current_author, params[:id]).index?
+			raise Pundit::NotAuthorizedError
+		end
 	end
 end
