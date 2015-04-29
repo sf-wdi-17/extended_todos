@@ -13,11 +13,12 @@
 
 	<% end %>
 
-	<%= form_for :author, url: "/authors", method: "post" do |f| %>
+	
 
-    <%= f.text_field :name %>
-    <%= f.submit "save author" %>
-
+	<% if author_signed_in? %>
+		<%= link_to 'Log out', destroy_author_session_path, method: :delete %>
+	<% else %>
+		<%= link_to 'Log in', new_author_session_path %>
 	<% end %>
 </body>
 </html>
